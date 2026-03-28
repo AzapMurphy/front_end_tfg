@@ -34,6 +34,9 @@
   gap: 25px;
   padding: 10px;
 }
+.cinta-productos .box{
+
+}
 
 /* Tarjetas */
 .product-card {
@@ -76,12 +79,12 @@ img[mat-card-image] {
   letter-spacing: 1px;
 }
 
-.mercadona { background-color: #00a650; }
-.carrefour { background-color: #0038a8; }
+.alcampo { background-color: #00a650; }
+
 .dia { background-color: #e2001a; }
 
-.border-mercadona { border-top-color: #00a650 !important; }
-.border-carrefour { border-top-color: #0038a8 !important; }
+.border-alcampo { border-top-color: #00a650 !important; }
+
 .border-dia { border-top-color: #e2001a !important; }
 
 .product-title {

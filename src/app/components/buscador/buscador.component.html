@@ -2,16 +2,20 @@
   <section class="search-section">
     <mat-form-field appearance="outline" class="search-bar">
       <mat-label>¿Qué producto buscas?</mat-label>
-      <input matInput 
-             [(ngModel)]="terminoBusqueda" 
-             (input)="filtrar()" 
-             placeholder="Ej: leche">
+      <input
+        matInput
+        [(ngModel)]="terminoBusqueda"
+        (input)="filtrar()"
+        (click)="send(terminoBusqueda)"
+        (keyup.enter)="send(terminoBusqueda)"
+        placeholder="Ej: leche"
+      />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </section>
 
   <div class="cinta-wrapper">
-    <div class="cinta-productos">
+    <!-- <div class="cinta-productos">
       <mat-card *ngFor="let producto of productosFiltrados" class="product-card">
         <div class="super-header" [ngClass]="producto.supermercado.toLowerCase()">
           {{ producto.supermercado }}
@@ -27,6 +31,27 @@
           </button>
         </mat-card-actions>
       </mat-card>
+    </div> -->
+    <div class="cinta-productos">
+      <div *ngIf="productos.length > 0; else sinDatos" class="box">
+        <mat-card *ngFor="let p of productos" class="product-card">
+
+            <div class="super-header" [ngClass]="p.supermercado?.nombre.toLowerCase()">
+              {{ p.supermercado?.nombre }}
+            </div>
+            <a [attr.href]="p.imagen" target="_blank"><img  mat-card-image [attr.src]="p.imagen" width="150"/></a>
+            <mat-card-content>
+              <h2 class="product-title">{{ p.nombre }}</h2>
+              <p class="product-price">{{ p.precio }} €</p>
+            </mat-card-content>
+
+        </mat-card>
+      </div>
+
     </div>
+
+    <ng-template #sinDatos>
+      <p>No hay productos</p>
+    </ng-template>
   </div>
 </div>
