@@ -98,7 +98,6 @@ export class BuscadorComponent implements OnInit {
   ngOnInit() {
     // Al empezar, mostramos todos los productos
     //this.productosFiltrados = this.listaProductos;
-
   }
 
   filtrar() {
@@ -124,20 +123,24 @@ export class BuscadorComponent implements OnInit {
       error: (err) => console.error(err),
       complete: () => {
         this.cargarProductos();
-      }
+      },
     });
   }
 
-cargarProductos() {
-  this.productoService.getProductos().subscribe({
-    next: (res) => {
-      console.log(res);
+  cargarProductos() {
+    this.productoService.getProductos().subscribe({
+      next: (res) => {
+        console.log(res);
 
-      if (res.code === 1) {
-        this.productos = res.data; // 👈 AQUÍ GUARDAS LOS PRODUCTOS
-      }
-    },
-    error: (err) => console.error(err)
-  });
-}
+        if (res.code === 1) {
+          this.productos = res.data; // 👈 AQUÍ GUARDAS LOS PRODUCTOS
+        }
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  logOut() {
+    this.productoService.logout().subscribe(() => {});
+  }
 }
