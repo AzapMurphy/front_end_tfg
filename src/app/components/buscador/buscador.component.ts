@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Producto } from '../../models/producto.model';
 import { CarritoService } from '../../services/carrito.service';
 import { ProductoService } from '../../services/producto.service';
+import { AuthServiceService } from '../../services/auth-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buscador',
@@ -93,6 +95,8 @@ export class BuscadorComponent implements OnInit {
   constructor(
     private carritoService: CarritoService,
     private productoService: ProductoService,
+    private authService: AuthServiceService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -141,6 +145,13 @@ export class BuscadorComponent implements OnInit {
   }
 
   logOut() {
+   this.authService.logout()
+    .then(() => {
+      this.router.navigate(['/login']);
+    })
+    .catch(error => {
+      alert('Error al salir: ' + error.message);
+    });
     this.productoService.logout().subscribe(() => {});
   }
 }

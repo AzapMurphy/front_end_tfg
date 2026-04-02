@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { AuthServiceService } from '../../services/auth-service.service';
 
 @Component({
   selector: 'app-login',
@@ -19,27 +20,66 @@ import { Router } from '@angular/router';
     MatButtonModule
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'] 
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  
 
-  usuario = {
-    nombre: '',
-    correo: '',
-    password: ''
-  };
 
-  constructor(private router: Router) {}
+  email: string = '';
+  password: string = '';
+  isLogin: boolean = true;
+  errorMessage: string = '';
+  loading: boolean = false;
 
-  onSubmit() {
-    console.log('Datos enviados:', this.usuario);
-    
-    if (this.usuario.correo && this.usuario.password) {
-      alert('Bienvenida, ' + (this.usuario.nombre || 'usuaria'));
+  constructor(
+    private authService: AuthServiceService,
+    private router: Router
+  ) {}
+
+  async onSubmit(): Promise<void> {
+    this.loading = true;
+    this.errorMessage = '';
+
+    try {
+      if (this.isLogin) {
+        await this.authService.login(this.email, this.password);
+      } else {
+        await this.authService.register(this.email, this.password);
+      }
       this.router.navigate(['/buscador']);
-    } else {
-      alert('Por favor, rellena los campos obligatorios');
+    } catch (error: any) {
+      this.errorMessage = this.getErrorMessage(error.code);
+    } finally {
+      this.loading = false;
     }
+  }
+
+  async loginWithGoogle(): Promise<void> {
+    this.loading = true;
+    try {
+      await this.authService.loginWithGoogle();
+      this.router.navigate(['/comparador']);
+    } catch (error: any) {
+      this.errorMessage = this.getErrorMessage(error.code);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  toggleMode(): void {
+    this.isLogin = !this.isLogin;
+    this.errorMessage = '';
+  }
+
+  private getErrorMessage(code: string): string {
+    const errors: { [key: string]: string } = {
+      'auth/user-not-found': 'Usuario no encontrado',
+      'auth/wrong-password': 'Contraseña incorrecta',
+      'auth/email-already-in-use': 'El email ya está registrado',
+      'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
+      'auth/invalid-email': 'Email no válido',
+      'auth/popup-closed-by-user': 'Popup cerrado por el usuario'
+    };
+    return errors[code] || 'Error desconocido';
   }
 }

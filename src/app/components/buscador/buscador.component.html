@@ -6,7 +6,6 @@
         matInput
         [(ngModel)]="terminoBusqueda"
         (input)="filtrar()"
-        (click)="send(terminoBusqueda)"
         (keyup.enter)="send(terminoBusqueda)"
         placeholder="Ej: leche"
       />
@@ -15,23 +14,6 @@
   </section>
 
   <div class="cinta-wrapper">
-    <!-- <div class="cinta-productos">
-      <mat-card *ngFor="let producto of productosFiltrados" class="product-card">
-        <div class="super-header" [ngClass]="producto.supermercado.toLowerCase()">
-          {{ producto.supermercado }}
-        </div>
-        <img mat-card-image [src]="producto.imagen">
-        <mat-card-content>
-          <h2 class="product-title">{{ producto.nombre }}</h2>
-          <p class="product-price">{{ producto.precio }} €</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-icon-button color="warn" (click)="anadirAlCarrito(producto)">
-            <mat-icon>add_shopping_cart</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div> -->
     <div class="cinta-productos">
       <div *ngIf="productos.length > 0; else sinDatos" class="box">
         <mat-card *ngFor="let p of productos" class="product-card">
@@ -51,7 +33,7 @@
         </mat-card>
       </div>
     </div>
-       <button matButton (click)="logOut()">
+    <button matButton (click)="logOut()">
       log gout
       <mat-icon iconPositionEnd>send</mat-icon>
     </button>
