@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Producto } from '../../models/producto.model';
 import { CarritoService } from '../../services/carrito.service';
 import { ProductoService } from '../../services/producto.service';
@@ -23,13 +24,16 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './buscador.component.html',
   styleUrl: './buscador.component.css',
 })
 export class BuscadorComponent implements OnInit {
   terminoBusqueda: string = '';
-
+  loading:boolean = false;
+  //Enviar scrape
+  sended = false;
   // Esta es la lista que se mostrará en el HTML
   productosFiltrados: Producto[] = [];
 
@@ -122,6 +126,7 @@ export class BuscadorComponent implements OnInit {
   }
 
   send(texto: string) {
+    this.loading = true;
     this.productoService.scrapeProductos(texto).subscribe({
       next: (res) => console.log(res),
       error: (err) => console.error(err),
@@ -137,7 +142,8 @@ export class BuscadorComponent implements OnInit {
         console.log(res);
 
         if (res.code === 1) {
-          this.productos = res.data; // 👈 AQUÍ GUARDAS LOS PRODUCTOS
+          this.productos = res.data;
+          this.loading = false;
         }
       },
       error: (err) => console.error(err),

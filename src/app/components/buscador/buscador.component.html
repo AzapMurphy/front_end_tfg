@@ -11,32 +11,38 @@
       />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-  </section>
 
+    <button  (click)="logOut()" mat-raised-button color="secondary">
+
+        Log out
+      </button>
+  </section>
   <div class="cinta-wrapper">
-    <div class="cinta-productos">
-      <div *ngIf="productos.length > 0; else sinDatos" class="box">
-        <mat-card *ngFor="let p of productos" class="product-card">
-          <div
-            class="super-header"
-            [ngClass]="p.supermercado?.nombre.toLowerCase()"
-          >
-            {{ p.supermercado?.nombre }}
-          </div>
-          <a [attr.href]="p.imagen" target="_blank"
-            ><img mat-card-image [attr.src]="p.imagen" width="150"
-          /></a>
-          <mat-card-content>
-            <h2 class="product-title">{{ p.nombre }}</h2>
-            <p class="product-price">{{ p.precio }} €</p>
-          </mat-card-content>
-        </mat-card>
+    <!-- LOADER -->
+    <div *ngIf="loading" class="loader-container">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+    <div *ngIf="!loading">
+      <div class="cinta-productos">
+        <div *ngIf="productos.length > 0; else sinDatos" class="box">
+          <mat-card *ngFor="let p of productos" class="product-card">
+            <div
+              class="super-header"
+              [ngClass]="p.supermercado?.nombre.toLowerCase()"
+            >
+              {{ p.supermercado?.nombre }}
+            </div>
+            <a [attr.href]="p.imagen" target="_blank"
+              ><img mat-card-image [attr.src]="p.imagen" width="150"
+            /></a>
+            <mat-card-content>
+              <h2 class="product-title">{{ p.nombre }}</h2>
+              <p class="product-price">{{ p.precio }} €</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
       </div>
     </div>
-    <button matButton (click)="logOut()">
-      log gout
-      <mat-icon iconPositionEnd>send</mat-icon>
-    </button>
 
     <ng-template #sinDatos>
       <p>No hay productos</p>
