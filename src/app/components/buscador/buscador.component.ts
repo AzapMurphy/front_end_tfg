@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Producto } from '../../models/producto.model';
-import { CarritoService } from '../../services/carrito.service';
 import { ProductoService } from '../../services/producto.service';
 import { AuthServiceService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
@@ -97,7 +96,6 @@ export class BuscadorComponent implements OnInit {
   productos: any[] = [];
 
   constructor(
-    private carritoService: CarritoService,
     private productoService: ProductoService,
     private authService: AuthServiceService,
     private router: Router
@@ -121,7 +119,6 @@ export class BuscadorComponent implements OnInit {
   }
 
   anadirAlCarrito(p: Producto) {
-    this.carritoService.agregar(p);
     alert('Añadido: ' + p.nombre);
   }
 
