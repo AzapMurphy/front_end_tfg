@@ -57,9 +57,6 @@
             <mat-card-content>
               <h2 class="product-title">{{ p.nombre }}</h2>
               <p class="product-price">{{ p.precio }} €</p>
-              <a class="product-icon" [href]="getSupermercadoUrl(p.supermercado?.nombre)" target="_blank" (click)="$event.stopPropagation()">
-                <img class="product-icon" [src]="getLogo(p.supermercado?.nombre)" [alt]="p.supermercado?.nombre || 'Desconocido'" />
-              </a>
             </mat-card-content>
             <mat-card-actions>
               <button
