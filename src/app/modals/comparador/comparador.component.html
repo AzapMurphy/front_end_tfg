@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>Comparar Productos</h2>
+    <mat-dialog-content>
+      <table class="comparador-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th *ngFor="let p of data.productos">{{ p.nombre | slice:0:20 }}...</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Imagen</td>
+            <td *ngFor="let p of data.productos">
+              <img [src]="p.imagen" alt="{{ p.nombre }}" width="80" />
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Supermercado</td>
+            <td *ngFor="let p of data.productos">
+              {{ p.supermercado?.nombre || p.supermercado }}
+            </td>
+          </tr>
+          <tr>
+            <td class="label">Precio</td>
+            <td *ngFor="let p of data.productos" [class.mejor-precio]="esMejorPrecio(p)">
+              {{ p.precio }} €
+            </td>
+          </tr>
+          <tr *ngIf="tieneFormato()">
+            <td class="label">Formato</td>
+            <td *ngFor="let p of data.productos">
+              {{ p.formato || '-' }}
+            </td>
+          </tr>
+          <tr *ngIf="tienePrecioPorLitro()">
+            <td class="label">Precio por litro</td>
+            <td *ngFor="let p of data.productos">
+              {{ p.precioPorLitro ? p.precioPorLitro + ' €/L' : '-' }}
+            </td>
+          </tr>
+          <tr *ngIf="tieneTipo()">
+            <td class="label">Tipo</td>
+            <td *ngFor="let p of data.productos">
+              {{ p.tipo || '-' }}
+            </td>
+          </tr>
+          <tr *ngIf="tieneMarca()">
+            <td class="label">Marca</td>
+            <td *ngFor="let p of data.productos">
+              {{ p.marca || '-' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="resultado">
+        <p *ngIf="getDiferenciaPrecio() !== 0">
+          <strong>Diferencia de precio:</strong> {{ getDiferenciaPrecio().toFixed(2) }} €
+        </p>
+        <p class="recomendacion">
+          <strong>Mejor opción:</strong> {{ getMejorOpcion()?.nombre }} en {{ getMejorOpcion()?.supermercado?.nombre || getMejorOpcion()?.supermercado }}
+        </p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="cerrar()">Cerrar</button>
+    </mat-dialog-actions>

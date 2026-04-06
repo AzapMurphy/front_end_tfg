@@ -5,38 +5,86 @@
       <input
         matInput
         [(ngModel)]="terminoBusqueda"
-        (input)="filtrar()"
         (keyup.enter)="send(terminoBusqueda)"
         placeholder="Ej: leche"
       />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
+
+    <button (click)="logOut()" mat-raised-button color="secondary">
+      Log out
+    </button>
   </section>
 
   <div class="cinta-wrapper">
-    <div class="cinta-productos">
-      <div *ngIf="productos.length > 0; else sinDatos" class="box">
-        <mat-card *ngFor="let p of productos" class="product-card">
-          <div
-            class="super-header"
-            [ngClass]="p.supermercado?.nombre.toLowerCase()"
-          >
-            {{ p.supermercado?.nombre }}
-          </div>
-          <a [attr.href]="p.imagen" target="_blank"
-            ><img mat-card-image [attr.src]="p.imagen" width="150"
-          /></a>
-          <mat-card-content>
-            <h2 class="product-title">{{ p.nombre }}</h2>
-            <p class="product-price">{{ p.precio }} €</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
+    <!-- LOADER -->
+    <div *ngIf="loading" class="loader-container">
+      <mat-spinner diameter="50"></mat-spinner>
     </div>
-    <button matButton (click)="logOut()">
-      log gout
-      <mat-icon iconPositionEnd>send</mat-icon>
-    </button>
+
+    <div *ngIf="!loading">
+      <!-- FILTRO POR SUPERMERCADO (solo visible si hay productos) -->
+      <div *ngIf="productos.length > 0" class="filter-section">
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por supermercado</mat-label>
+          <mat-select
+            [(ngModel)]="supermercadoSeleccionado"
+            (selectionChange)="filtrarPorSupermercado()"
+          >
+            <mat-option value="">Todos</mat-option>
+            <mat-option
+              *ngFor="let super of supermercadosUnicos"
+              [value]="super"
+            >
+              {{ super }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="cinta-productos">
+        <div *ngIf="productosPaginados.length > 0; else sinDatos" class="box">
+          <mat-card *ngFor="let p of productosPaginados" class="product-card" [class.selected]="estaSeleccionado(p)">
+            <div
+              class="super-header"
+              [ngClass]="p.supermercado?.nombre?.toLowerCase()"
+            >
+              {{ p.supermercado?.nombre }}
+            </div>
+            <a [attr.href]="p.imagen" target="_blank">
+              <img mat-card-image [attr.src]="p.imagen" width="150" />
+            </a>
+            <mat-card-content>
+              <h2 class="product-title">{{ p.nombre }}</h2>
+              <p class="product-price">{{ p.precio }} €</p>
+              <a class="product-icon" [href]="getSupermercadoUrl(p.supermercado?.nombre)" target="_blank" (click)="$event.stopPropagation()">
+                <img class="product-icon" [src]="getLogo(p.supermercado?.nombre)" [alt]="p.supermercado?.nombre || 'Desconocido'" />
+              </a>
+            </mat-card-content>
+            <mat-card-actions>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="toggleComparar(p)"
+              >
+                {{ estaSeleccionado(p) ? "Quitar" : "Comparar" }}
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+
+      <!-- PAGINADOR -->
+      <mat-paginator
+        *ngIf="productosFiltrados.length > 0"
+        [length]="productosFiltrados.length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
 
     <ng-template #sinDatos>
       <p>No hay productos</p>
