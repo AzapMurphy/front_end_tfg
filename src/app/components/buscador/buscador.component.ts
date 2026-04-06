@@ -169,6 +169,27 @@ terminoBusqueda: string = '';
 
   // ==================== FIN COMPARACIÓN ====================
 
+   // ==================== INCIO LOGOS REDIRECCIONABLES ====================
+
+  supermercados : Record<string, { logo: string; url: string }>  = {
+    ahorramas: {logo: 'assets/logos/ahorramas.png', url: 'https://ahorramas.com/'},
+    alcampo: {logo: 'assets/logos/alcampo.png', url: 'https://compraonline.alcampo.es'},
+    dia: {logo: 'assets/logos/dia.png', url: 'https://dia.es/'}
+  };
+
+  getLogo(supermercado?: any): string{
+     const key = String(supermercado || '').toLowerCase();
+     return this.supermercados[key]?.logo || 'assets/logos/default.png';
+    
+  }
+
+  getSupermercadoUrl(supermercado?: any): string{
+    const key = String(supermercado || '').toLocaleLowerCase();
+    return this.supermercados[key]?.url || '';
+  }
+
+  // ==================== FIN LOGOS REDIRECCIONABLES ======================
+
   anadirAlCarrito(p: Producto) {
     alert('Añadido: ' + p.nombre);
   }

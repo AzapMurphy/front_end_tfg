@@ -155,6 +155,12 @@ img[mat-card-image] {
   color: #2c3e50;
   text-align: center;
 }
+
+.product-icon {
+  width: 70px;
+  height: 45px;
+}
+
 .cinta-productos::-webkit-scrollbar {
   height: 8px;
 }
